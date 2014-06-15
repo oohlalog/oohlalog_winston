@@ -1,5 +1,5 @@
   var winston = require('winston');
-  var oll = require('./winston-oohlalog');
+  var oll = require('./src/winston-oohlalogTransport');
 
   var logger = new winston.Logger({
   	transports: [

@@ -1,0 +1,11 @@
+#!/bin/bash
+#Testing OohLaLog Tranponder
+
+OUTPUT1='Flushing 101 logs from quantity threshold.
+{"insertCount":101,"success":true}
+Flushing 150 logs from time threshold.
+{"insertCount":150,"success":true}'
+echo "$OUTPUT1" > valid1
+node  TestOLLTransport.js > output1
+diff output1 valid1
+rm -f valid1 output1

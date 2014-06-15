@@ -13,15 +13,16 @@ var OohLaLog = winston.transports.OohLaLog = function (options) {
   }
 
 
-    this.name = "OohLaLog";
-    this.level = options.level || 'info';
-    this.apiKey = options.apiKey;
-    this.hostName = options.hostName;
-    this.threshold = options.threshold || 100;
-    this.timedFlush= options.timedFlush || 10000;
+  this.name = "OohLaLog";
+  this.level = options.level || 'info';
+  this.apiKey = options.apiKey;
+  this.hostName = options.hostName;
+  this.threshold = options.threshold || 100;
+  this.timedFlush= options.timedFlush || 1000;
     this.host = "localhost" //"api.oohlalog.com"
     this.port = 8196 //80;
     this.path = "/api/logging/save.json";
+    this.debug = options.debug || false;
     this.logs = [];
     this.timeout = null;
     this.isTimerStarted = false;
@@ -31,14 +32,18 @@ var OohLaLog = winston.transports.OohLaLog = function (options) {
   // of the base functionality and `.handleExceptions()`.
   util.inherits(OohLaLog, winston.Transport);
 
-  var flushBuffer = function(oll) {
-    console.log("flushbuffer");
+  var flushBuffer = function(oll, timeExp) {
     var batch = [];
     var length = oll.logs.length;
     if (length == 0) {
       clearInterval(oll.timeout);
       this.isTimerStarted = false;
       return;
+    }
+
+    if (oll.debug) { 
+      if (timeExp) { console.log("Flushing " + length + " logs from time threshold."); }
+      else { console.log("Flushing " + length + " logs from quantity threshold."); }
     }
 
     for (var i = 0; i < length; i++) {
@@ -72,58 +77,62 @@ var OohLaLog = winston.transports.OohLaLog = function (options) {
 
       res.on('data', function(data) {
        responseString += data;
-      });
+     });
 
       res.on('end', function() {
-      var resultObject = responseString;
+        var resultObject = responseString;
+        if(oll.debug) { console.log(responseString); }
       });
     });
     req.on('error', function(e) {
      // TODO: handle error.
-    });
+   });
 
     req.write(payload);
     req.end();
   }
 
 
-var checkBufferSize = function(oll) {
-  if (oll.logs.length == 0) {
-    return;
+  var checkBufferSize = function(oll) {
+    if (oll.logs.length == 0) {
+      return;
+    }
+
+    if (oll.logs.length > oll.threshold && oll.logs.length > 0) {
+      flushBuffer(oll, false);
+    }
   }
 
-  if (oll.logs.length > oll.threshold && oll.logs.length > 0) {
-    flushBuffer(oll);
-  }
-}
 
+  OohLaLog.prototype.log = function (level, msg, meta, callback) {
+    if (!this.isTimerStarted && this.timedFlush > 0) {
+      this.isTimerStarted = true;
+      var self = this;
+      this.timeout = setInterval(
+        function(){ 
+          flushBuffer(self, true);
+        }, 
+        self.timedFlush); 
+    }
+    var data = {
+      level     : level,
+      message   : msg,
+      timestamp : Date.now(),
+      agent : this.hostName
+    };
 
-OohLaLog.prototype.log = function (level, msg, meta, callback) {
-  if (!this.isTimerStarted) {
-    this.isTimerStarted = true;
-    var self = this;
-    this.timeout = setInterval(function(){ flushBuffer(self);} ,self.timedFlush); 
-  }
+    if (meta.category) {
+      data.category = meta.category;
+    }
 
-  var data = {
-    level     : level,
-    message   : msg,
-    timestamp : Date.now(),
-    agent : this.hostName
+    if (meta.details) {
+      data.details = meta.details;
+    }
+
+    this.logs.push(data);
+    checkBufferSize(this);
+    callback(null, true);
   };
-
-  if (meta.category) {
-    data.category = meta.category;
-  }
-
-  if (meta.details) {
-    data.details = meta.details;
-  }
-
-  this.logs.push(data);
-  checkBufferSize(this);
-  callback(null, true);
-};
 
 //Define as a property of winston transports for backward compatibility
 winston.transports.OohLaLog = OohLaLog;
