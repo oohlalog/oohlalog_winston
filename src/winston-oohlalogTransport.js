@@ -81,7 +81,10 @@ var OohLaLog = winston.transports.OohLaLog = function (options) {
 
       res.on('end', function() {
         var resultObject = responseString;
-        if(oll.debug) { console.log(responseString); }
+        if(oll.debug) { 
+          console.log(payload);
+          console.log(responseString); 
+        }
       });
     });
     req.on('error', function(e) {
@@ -98,7 +101,7 @@ var OohLaLog = winston.transports.OohLaLog = function (options) {
       return;
     }
 
-    if (oll.logs.length > oll.threshold && oll.logs.length > 0) {
+    if (oll.logs.length >= oll.threshold && oll.logs.length > 0) {
       flushBuffer(oll, false);
     }
   }
@@ -130,6 +133,9 @@ var OohLaLog = winston.transports.OohLaLog = function (options) {
     }
 
     this.logs.push(data);
+    // if (debug) {
+    //   console.log(msg);
+    // }
     checkBufferSize(this);
     callback(null, true);
   };
