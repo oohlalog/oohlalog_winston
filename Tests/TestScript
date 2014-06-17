@@ -18,5 +18,21 @@ echo
 python Test3.py < output1.txt
 
 echo "======================================================="
+
 #Clean up
 rm -f output1.txt
+
+echo "Test 4"
+echo
+node Test4.js > test4.txt 
+if [ -s test4.txt ]
+then
+	echo "FAILURE: Output of this test should be empty"
+else
+	echo "SUCCESS"
+fi
+
+echo "======================================================="
+
+#Clean up
+rm -f test4.txt
