@@ -11,12 +11,12 @@
       level : "info",
       debug : true,
       timedFlush : -1, // Big number, won't flush due to time
-      threshold : 25
+      threshold : 150
     }),
     ]
   });
 
-  for (var i = 0; i < 25; i++) {
+  for (var i = 0; i < 150; i++) {
     // Won't get logged because it is below the info level
     logger.log("debug", "DEBUG:"+i, { category : "category", details: "details"}); 
     // Won't get logged because it is below the info level

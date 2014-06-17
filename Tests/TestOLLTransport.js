@@ -8,12 +8,12 @@ winston.add(oll, {
       level : "verbose",
       debug : true,
       timedFlush : 10, 
-      threshold : 151
+      threshold : 10
     });
 
 // var logger = new winston.Logger({
 //   transports: winston.transports.oll});
 
-  for (var i = 0; i < 150; i++) {
-    winston.log("warn", ""+i, { category : "category", details: "details"});
+  for (var i = 0; i < 10; i++) {
+    winston.log("warn", i, { category : "category", details: "details", curious: "I am"});
   }

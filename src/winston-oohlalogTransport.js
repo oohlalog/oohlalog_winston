@@ -42,8 +42,8 @@ var OohLaLog = winston.transports.OohLaLog = function (options) {
     }
 
     if (oll.debug) { 
-      if (timeExp) { console.log("Flushing " + length + " logs from time threshold."); }
-      else { console.log("Flushing " + length + " logs from quantity threshold."); }
+      if (timeExp) { console.log(">>>>>Flushing " + length + " logs from time threshold."); }
+      else { console.log(">>>>>Flushing " + length + " logs from quantity threshold."); }
     }
 
     for (var i = 0; i < length; i++) {
@@ -64,7 +64,7 @@ var OohLaLog = winston.transports.OohLaLog = function (options) {
       host: oll.host,
       port: oll.port,
       apiKey: oll.apiKey,
-      path: [oll.path, "?apiKey=", oll.apiKey].join(""),
+      path: oll.path+ "?apiKey=" + oll.apiKey,
       method: "POST",
       headers: headers
     };
@@ -82,8 +82,7 @@ var OohLaLog = winston.transports.OohLaLog = function (options) {
       res.on('end', function() {
         var resultObject = responseString;
         if(oll.debug) { 
-          console.log(payload);
-          console.log(responseString); 
+          console.log(">>>>>Response: " + responseString); 
         }
       });
     });
@@ -124,18 +123,23 @@ var OohLaLog = winston.transports.OohLaLog = function (options) {
       agent : this.hostName
     };
 
+    // Records metadata
     if (meta.category) {
       data.category = meta.category;
+      delete meta.category;
     }
 
     if (meta.details) {
       data.details = meta.details;
+      delete meta.details;
     }
 
-    this.logs.push(data);
-    // if (debug) {
-    //   console.log(msg);
-    // }
+    if (meta) {
+      data.details += "\nMetadata: " + JSON.stringify(meta);
+    }
+
+     this.logs.push(data);
+
     checkBufferSize(this);
     callback(null, true);
   };
