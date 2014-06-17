@@ -17,8 +17,8 @@ var OohLaLog = winston.transports.OohLaLog = function (options) {
   this.level = options.level || 'info';
   this.apiKey = options.apiKey;
   this.hostName = options.hostName;
-  this.threshold = options.threshold || 100;
-  this.timedFlush= options.timedFlush || 1000;
+  this.threshold = options.threshold || 150;
+  this.timedFlush= options.timedFlush || 10000;
     this.host = "localhost" //"api.oohlalog.com"
     this.port = 8196 //80;
     this.path = "/api/logging/save.json";
