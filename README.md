@@ -1,9 +1,5 @@
-oohlalog_winston
-================
-
-An OohLaLog Adapter for the Winston Logging Library in Node.js
 # oohlalog_winston 
-An OohLaLog transport for [winston][0].
+An OohLaLog transport for [winston][0] logging in Node.js.
 
 ## Motivation
 To extend [winston][0] logging to OohLaLog.
