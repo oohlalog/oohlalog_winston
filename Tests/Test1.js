@@ -11,16 +11,17 @@
       level : "info",
       debug : true,
       timedFlush : -1, // Big number, won't flush due to time
-      threshold : 150
+      threshold : 25
     }),
     ]
   });
 
-  for (var i = 0; i < 150; i++) {
+  for (var i = 0; i < 25; i++) {
     // Won't get logged because it is below the info level
     logger.log("debug", "DEBUG:"+i, { category : "category", details: "details"}); 
     // Won't get logged because it is below the info level
     logger.log("verbose", "VERBOSE:"+i, { category : "category", details: "details"});
+
     logger.log("info", "INFO:"+i, { category : "category", details: "details"});
     logger.log("warn", "WARN:"+i, { category : "category", details: "details"});
     logger.log("error", "ERROR:"+i, { category : "category", details: "details"});
