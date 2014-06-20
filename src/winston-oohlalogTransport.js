@@ -13,7 +13,6 @@ var OohLaLog = winston.transports.OohLaLog = function (options) {
     throw "winston-oohlalog requires 'hostName' property";
   }
 
-
   this.name = "OohLaLog";
   this.level = options.level || 'info';
   this.apiKey = options.apiKey;
@@ -21,27 +20,14 @@ var OohLaLog = winston.transports.OohLaLog = function (options) {
   this.threshold = options.threshold || 150;
   this.maxBuffer = options.maxBuffer || 2000;
   this.timedFlush = options.timedFlush || 10000;
-    this.host = "localhost" //"api.oohlalog.com"
-    this.port = 8196 //80;
+    this.host = "api.oohlalog.com" //localhost
+    this.port = 80 // 8196;
     this.path = "/api/logging/save.json";
     this.debug = options.debug || false;
     this.logs = [];
     this.timeout = null;
     this.isTimerStarted = false;
-
-  //   var EventEmitter = require("events").EventEmitter;
-  // this.ee = new EventEmitter();
 };
-  // this.ee.on("reachedThreshold", function(){
-  //   OohLaLog.call(this, flushBuffer, false);
-  // }); 
-
-
-
-  // ee.on("finishedFlush", function (fromTimer) {
-  //   OohLaLog.prototype.checkBufferSize;
-  // });
-
 
 function flushBuffer(timeExp) {
   self = this;
@@ -69,8 +55,7 @@ function flushBuffer(timeExp) {
   });
 
   var headers = {
-    'Content-Type': 'application/json',
-      // 'Content-Length': payload.length
+    'Content-Type': 'application/json'
     };
 
     var options = {
@@ -125,8 +110,6 @@ function flushBuffer(timeExp) {
 util.inherits(OohLaLog, winston.Transport);
 
 
-
-
 function addToBuffer(log) {
   this.logs.push(log);
 
@@ -141,8 +124,7 @@ function checkBufferSize() {
   if (this.logs.length == 0) {
     return;
   }
-
-  if ( (this.logs.length >= this.threshold) && (this.logs.length > 0)) {
+  else if ( (this.logs.length >= this.threshold) && (this.logs.length > 0)) {
    this.flushBuffer(false);
   }
 }
@@ -198,5 +180,3 @@ module.exports = OohLaLog;
 //The rest of winston transports uses (module).name convention
 //Create a field to allow consumers to interact in the same way
 module.exports.OohLaLog = OohLaLog;
-
-

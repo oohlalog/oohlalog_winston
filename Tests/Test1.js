@@ -10,7 +10,7 @@
       hostName: "Logger",
       level : "info",
       debug : true,
-      timedFlush : -1, // Big number, won't flush due to time
+      timedFlush : -1, // Negative number turns it off
       threshold : 25
     }),
     ]
