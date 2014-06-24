@@ -1,6 +1,6 @@
 {
   "name": "winston-oohlalog",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "An OohLaLog transport for winston.",
   "author": "Julian Griggs <jgriggs@princeton.edu>",
   "repository": {
