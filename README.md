@@ -17,7 +17,7 @@ To extend [winston][0] logging to OohLaLog.
   
   winston.add(OohLaLog, options);
 ```
-The OohLaLog transport takes the following options. apiKey is the only one required.
+The OohLaLog transport takes the following options.
 
 * __apiKey:__ Your OohLaLog API key
 * __hostName:__ The host name of your application
