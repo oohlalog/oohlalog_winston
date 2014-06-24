@@ -7,7 +7,7 @@
     transports: [
     new (winston.transports.OohLaLog)({
       apiKey : "1f111a85-62c7-4f42-8dd9-8a10bb80dc6e",
-      hostName: "Logger",
+      hostName: "Test",
       level : "info",
       debug : true,
       timedFlush : -1, // Negative number turns it off

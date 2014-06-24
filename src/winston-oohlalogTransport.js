@@ -9,20 +9,17 @@ var OohLaLog = winston.transports.OohLaLog = function (options) {
     throw "winston-oohlalog requires 'apikey' property";
   }
 
-  if (!options.hostName){
-    throw "winston-oohlalog requires 'hostName' property";
-  }
-
-  this.name = "OohLaLog";
+  this.name = 'OohLaLog';
+  this.agent = 'winston';
   this.level = options.level || 'info';
   this.apiKey = options.apiKey;
   this.hostName = options.hostName;
   this.threshold = options.threshold || 150;
   this.maxBuffer = options.maxBuffer || 2000;
   this.timedFlush = options.timedFlush || 10000;
-    this.host = "api.oohlalog.com" //localhost
+    this.host = 'api.oohlalog.com' //localhost
     this.port = 80 // 8196;
-    this.path = "/api/logging/save.json";
+    this.path = '/api/logging/save.json';
     this.debug = options.debug || false;
     this.logs = [];
     this.timeout = null;
@@ -41,8 +38,8 @@ function flushBuffer(timeExp) {
   }
 
   if (self.debug) { 
-    if (timeExp) { console.log(">>>>>Flushing " + length + " logs from time threshold."); }
-    else { console.log(">>>>>Flushing " + length + " logs from quantity threshold."); }
+    if (timeExp) { console.log('>>>>>Flushing ' + length + ' logs from time threshold.'); }
+    else { console.log('>>>>>Flushing ' + length + ' logs from quantity threshold.'); }
   }
 
   for (var i = 0; i < length; i++) {
@@ -62,8 +59,8 @@ function flushBuffer(timeExp) {
       host: self.host,
       port: self.port,
       apiKey: self.apiKey,
-      path: self.path+ "?apiKey=" + self.apiKey,
-      method: "POST",
+      path: self.path + '?apiKey=' + self.apiKey,
+      method: 'POST',
       headers: headers
     };
 
@@ -83,8 +80,8 @@ function flushBuffer(timeExp) {
       response.on('end', function() {
         var resultObject = str;
         if(self.debug) { 
-          console.log(">>>>>Payload: " + payload);
-          console.log(">>>>>Response: " + str); 
+          console.log('>>>>>Payload: ' + payload);
+          console.log('>>>>>Response: ' + str); 
         }
       });
     }
@@ -130,6 +127,14 @@ function checkBufferSize() {
 }
 
 
+function isEmpty(obj) {
+  for (var prop in obj) {
+    if (obj.hasOwnProperty(prop)) return false;
+  }
+  return true;
+}
+
+
 function log(level, msg, meta, callback) {
   if (!this.isTimerStarted && this.timedFlush > 0) {
     this.isTimerStarted = true;
@@ -144,22 +149,25 @@ function log(level, msg, meta, callback) {
     level     : level,
     message   : msg,
     timestamp : Date.now(),
-    agent : this.hostName
+    agent : this.agent,
+    hostName : this.hostName,
   };
    
-  // Records metadata
+  // Records category data (if present)
   if (meta.category) {
     log.category = meta.category;
     delete meta.category;
   }
   
+  // Records details (if present)
   if (meta.details) {
     log.details = meta.details;
     delete meta.details;
   }
-  
-  if (meta) {
-    log.details += "\nMetadata: " + JSON.stringify(meta);
+
+  // Records all other metadata (if present)
+  if (!isEmpty(meta)) {
+    log.details += '\nMetadata: ' + JSON.stringify(meta);
   }
 
   this.addToBuffer(log);

@@ -4,7 +4,7 @@
 
 winston.add(oll, {
   apiKey : "1f111a85-62c7-4f42-8dd9-8a10bb80dc6e",
-      hostName: "Logger",
+      hostName: "Test",
       level : "verbose",
       debug : true,
       timedFlush : 10, 
