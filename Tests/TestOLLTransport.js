@@ -1,5 +1,5 @@
   var winston = require('winston');
-  var oll = require('../src/winston-oohlalogTransport');
+  var oll = require('../lib/winston-oohlalogTransport');
 
 
 winston.add(oll, {
