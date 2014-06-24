@@ -1,20 +1,30 @@
 {
   "name": "winston-oohlalog",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "An OohLaLog transport for winston.",
   "author": "Julian Griggs <jgriggs@princeton.edu>",
   "repository": {
     "type": "git",
     "url": "https://github.com/oohlalog/oohlalog_winston.git"
   },
-  "keywords": [ "logging", "winston", "OohLaLog" ],
+  "keywords": [
+    "logging",
+    "winston",
+    "OohLaLog"
+  ],
   "dependencies": {
     "winston": "0.7.x"
   },
   "main": "./lib/winston-oohlalogTransport.js",
-  "scripts": { "test": "echo \"Error: no test specified\" && exit 1" },
-  "engines": { "node": ">= 0.4.0" },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "engines": {
+    "node": ">= 0.4.0"
+  },
   "license": "MIT",
-  "bugs": { "url": "https://github.com/oohlalog/oohlalog_winston/issues" },
+  "bugs": {
+    "url": "https://github.com/oohlalog/oohlalog_winston/issues"
+  },
   "homepage": "http://www.oohlalog.com"
 }
